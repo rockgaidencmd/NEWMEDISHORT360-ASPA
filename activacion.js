@@ -1,8 +1,6 @@
 /* ============================================================
    MEDISHORT360 - ASPA · Activación por código único
    Verifica el código en Firebase Firestore → colección "codigos_aspa".
-   No modifica app.js ni el diseño de la calculadora: solo controla
-   la "puerta" (#aspa-gate) que está encima de la app.
    ============================================================ */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
@@ -24,23 +22,22 @@ const firebaseConfig = {
   measurementId: "G-YB1S88CPYJ"
 };
 
-const COLECCION = "codigos_aspa";        // nombre exacto de tu colección
-const LS_KEY     = "aspa_activado";       // marca de activación en este dispositivo
+const COLECCION = "codigos_aspa";
+const LS_KEY     = "aspa_activado";
 
 /* ────────────────────────────────────────────────────────────
-   Referencias al DOM de la puerta
+   Referencias al DOM
    ──────────────────────────────────────────────────────────── */
-const body    = document.body;
 const inputEl = document.getElementById("aspa-codigo");
 const btnEl   = document.getElementById("aspa-activar");
 const msgEl   = document.getElementById("aspa-msg");
 const gateEl  = document.getElementById("aspa-gate");
 
 /* ────────────────────────────────────────────────────────────
-   Si ya estaba activado en este dispositivo → desbloquear directo
+   Si ya estaba activado → ocultar la puerta directo
    ──────────────────────────────────────────────────────────── */
 if (localStorage.getItem(LS_KEY) === "1") {
-  desbloquear(false);
+  gateEl.classList.add("hidden");
 }
 
 /* ────────────────────────────────────────────────────────────
@@ -63,34 +60,28 @@ function mensaje(txt, tipo) {
 }
 
 /* ────────────────────────────────────────────────────────────
-   Desbloquear: quita la puerta y muestra la calculadora
+   Desbloquear: oculta la puerta y muestra la calculadora
    ──────────────────────────────────────────────────────────── */
 function desbloquear(conAnimacion = true) {
   if (conAnimacion && gateEl) {
     gateEl.style.opacity = "0";
-    setTimeout(() => body.classList.remove("aspa-bloqueada"), 450);
+    setTimeout(() => gateEl.classList.add("hidden"), 450);
   } else {
-    body.classList.remove("aspa-bloqueada");
+    gateEl.classList.add("hidden");
   }
 }
 
 /* ────────────────────────────────────────────────────────────
-   Verificar el código contra Firestore.
-   Soporta las dos formas más comunes de guardar códigos:
-     A) El ID del documento ES el código     → codigos_aspa/ABC123
-     B) El código está en un campo "codigo"   → { codigo: "ABC123" }
-   Si el documento trae { activo: false }, se rechaza.
+   Verificar código contra Firestore
    ──────────────────────────────────────────────────────────── */
 async function verificarCodigo(code) {
   if (!db) return { ok: false, motivo: "Sin conexión a Firebase." };
 
-  // A) Buscar por ID de documento
   try {
     const snap = await getDoc(doc(db, COLECCION, code));
     if (snap.exists()) return evaluarDoc(snap.data());
-  } catch (e) { /* sigue al método B */ }
+  } catch (e) { /* sigue */ }
 
-  // B) Buscar por campo "codigo"
   try {
     const q  = query(collection(db, COLECCION), where("codigo", "==", code));
     const qs = await getDocs(q);
@@ -114,7 +105,11 @@ function evaluarDoc(data) {
    ──────────────────────────────────────────────────────────── */
 async function activar() {
   const code = (inputEl.value || "").trim();
-  if (!code) { mensaje("Escribe tu código.", "error"); inputEl.focus(); return; }
+  if (!code) { 
+    mensaje("Escribe tu código.", "error"); 
+    inputEl.focus(); 
+    return; 
+  }
 
   btnEl.disabled = true;
   mensaje("Verificando…", "ok");
@@ -141,4 +136,6 @@ btnEl.addEventListener("click", activar);
 inputEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter") activar();
 });
-window.addEventListener("DOMContentLoaded", () => inputEl && inputEl.focus());
+window.addEventListener("DOMContentLoaded", () => {
+  inputEl && inputEl.focus();
+});
