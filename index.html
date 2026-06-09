@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0f1419">
+    <meta name="description" content="Calculadora de soluciones salinas y dextrosa profesional para entornos clinicos">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MEDISHORT360">
+    <title>MEDISHORT360-ASPA</title>
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icono-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./icono-512.png">
+    <link rel="apple-touch-icon" href="./icono-192.png">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="contenedor-principal">
+        <header class="encabezado">
+            <h1 class="titulo">MEDISHORT360</h1>
+            <p class="subtitulo">Calculadora de Soluciones Clinicas</p>
+        </header>
+
+        <div class="seccion-logo">
+            <div class="logo-animado">
+                <img src="./logo.jpeg" alt="MEDISHORT360 Logo" class="logo-img">
+            </div>
+        </div>
+
+        <div class="contenedor-calculadora">
+            <div class="tab-contenedor">
+                <button class="tab-boton activo" data-tab="soluciones">Soluciones Salinas</button>
+                <button class="tab-boton" data-tab="dextrosa">Dextrosa</button>
+            </div>
+
+            <!-- TAB: SOLUCIONES SALINAS -->
+            <div id="soluciones" class="contenido-tab activo">
+                <div class="grupo-entrada">
+                    <label for="volumen-salina">Volumen Deseado (mL):</label>
+                    <input type="number" id="volumen-salina" placeholder="Ej: 500" min="0" step="10">
+                </div>
+
+                <div class="grupo-entrada">
+                    <label for="concentracion-salina">Concentracion de Solucion (%):</label>
+                    <div class="botones-rapidos">
+                        <button class="boton-rapido" data-valor="0.9">0.9%</button>
+                        <button class="boton-rapido" data-valor="3">3%</button>
+                        <button class="boton-rapido" data-valor="7">7%</button>
+                    </div>
+                    <input type="number" id="concentracion-salina" placeholder="Ej: 3" min="0" step="0.1">
+                </div>
+
+                <button id="boton-calcular-salina" class="boton-principal">Calcular Solucion Salina</button>
+
+                <div id="resultado-salina" class="resultado"></div>
+            </div>
+
+            <!-- TAB: DEXTROSA -->
+            <div id="dextrosa" class="contenido-tab">
+                <div class="grupo-entrada">
+                    <label for="volumen-dextrosa">Volumen Deseado (mL):</label>
+                    <input type="number" id="volumen-dextrosa" placeholder="Ej: 500" min="0" step="10">
+                </div>
+
+                <div class="grupo-entrada">
+                    <label for="concentracion-dextrosa">Concentracion de Dextrosa (%):</label>
+                    <div class="botones-rapidos">
+                        <button class="boton-rapido" data-valor="5">5%</button>
+                        <button class="boton-rapido" data-valor="10">10%</button>
+                        <button class="boton-rapido" data-valor="50">50%</button>
+                    </div>
+                    <input type="number" id="concentracion-dextrosa" placeholder="Ej: 5" min="0" step="0.1">
+                </div>
+
+                <button id="boton-calcular-dextrosa" class="boton-principal">Calcular Dextrosa</button>
+
+                <div id="resultado-dextrosa" class="resultado"></div>
+            </div>
+
+            <button id="boton-limpiar" class="boton-limpiar">Limpiar</button>
+        </div>
+
+        <footer class="pie">
+            <p>MEDISHORT360-ASPA &copy; 2024 | Herramienta Educativa Profesional</p>
+        </footer>
+    </div>
+
+    <script src="./app.js"></script>
+</body>
+</html>

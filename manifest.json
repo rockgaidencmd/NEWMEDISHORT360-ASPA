@@ -1,0 +1,65 @@
+{
+  "name": "MEDISHORT360-ASPA Calculadora Clinica",
+  "short_name": "MEDISHORT360",
+  "description": "Calculadora profesional de soluciones salinas y dextrosa para entornos clinicos",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f1419",
+  "theme_color": "#0f1419",
+  "categories": ["medical", "healthcare", "productivity"],
+  "screenshots": [
+    {
+      "src": "./icono-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icono-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "icons": [
+    {
+      "src": "./icono-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icono-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Solucion Salina",
+      "short_name": "Salina",
+      "description": "Calcular solucion salina",
+      "url": "./index.html?tab=soluciones",
+      "icons": [
+        {
+          "src": "./icono-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Dextrosa",
+      "short_name": "Dextrosa",
+      "description": "Calcular dextrosa",
+      "url": "./index.html?tab=dextrosa",
+      "icons": [
+        {
+          "src": "./icono-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
+}
