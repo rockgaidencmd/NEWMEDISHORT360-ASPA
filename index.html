@@ -15,16 +15,8 @@
     <link rel="apple-touch-icon" href="./icono-192.png" />
     <link rel="stylesheet" href="./style.css" />
 
-    <!-- ================== PANTALLA DE ACTIVACION (estilos) ==================
-         Solo añade la "puerta" de activacion encima de la app.
-         No modifica el diseño original de la calculadora.
-         ====================================================================== -->
+    <!-- ================== PANTALLA DE ACTIVACION (estilos) ================== -->
     <style>
-      /* Mientras NO esté activada, se oculta la app por debajo (sin parpadeo) */
-      body.aspa-bloqueada #root,
-      body.aspa-bloqueada #particles,
-      body.aspa-bloqueada #install-btn { visibility: hidden; }
-
       #aspa-gate {
         position: fixed;
         inset: 0;
@@ -39,7 +31,7 @@
         color: #f0f4ff;
         transition: opacity .45s ease;
       }
-      body:not(.aspa-bloqueada) #aspa-gate { display: none; }
+      #aspa-gate.hidden { display: none; }
 
       .aspa-gate-card {
         width: 100%;
@@ -72,7 +64,6 @@
         font-size: 13px; color: #7a8aac; line-height: 1.5; margin-bottom: 22px;
       }
 
-      /* === CUADRO DEL CÓDIGO: AZUL DE LA APP (#4ea6dc) === */
       .aspa-input-row {
         display: flex; align-items: center;
         border: 1.5px solid #4ea6dc;
@@ -125,8 +116,8 @@
       }
     </style>
   </head>
-  <body class="aspa-bloqueada">
-    <!-- ============ PUERTA DE ACTIVACION (se quita al validar) ============ -->
+  <body>
+    <!-- ============ PUERTA DE ACTIVACION ============ -->
     <div id="aspa-gate">
       <div class="aspa-gate-card">
         <img src="./icono-192.png" alt="MEDISHORT360" class="aspa-logo" />
