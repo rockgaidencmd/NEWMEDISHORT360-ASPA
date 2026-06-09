@@ -18,7 +18,7 @@ const firebaseConfig = {
 };
 // ─────────────────────────────────────────────
 
-const COLECCION   = 'medishort360';
+const COLECCION   = 'codigos_aspa';
 const LS_KEY      = 'ms360aspa_activado';
 const LS_CODE_KEY = 'ms360aspa_codigo';
 
