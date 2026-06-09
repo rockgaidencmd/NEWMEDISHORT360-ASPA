@@ -1,84 +1,68 @@
-// Nombre de la cache
-const CACHE_NAME = 'medishort360-aspa-v1';
+// Nombre de la cache — SUBIDO A v3 para forzar limpieza del caché viejo
+const CACHE_NAME = 'medishort360-aspa-v3';
+
 const urlsParaCache = [
     './',
     './index.html',
     './style.css',
     './app.js',
+    './activacion.js',
     './manifest.json',
     './icono-192.png',
     './icono-512.png'
 ];
 
-// Instalar el Service Worker y hacer cache de los archivos
+// Instalar: cachea los archivos nuevos
 self.addEventListener('install', (evento) => {
     evento.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(urlsParaCache);
-        })
+        caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsParaCache))
     );
     self.skipWaiting();
 });
 
-// Activar el Service Worker
+// Activar: borra TODOS los caches viejos (cualquiera que no sea v3)
 self.addEventListener('activate', (evento) => {
     evento.waitUntil(
-        caches.keys().then((nombresCaches) => {
-            return Promise.all(
-                nombresCaches.map((nombreCache) => {
-                    if (nombreCache !== CACHE_NAME) {
-                        return caches.delete(nombreCache);
-                    }
+        caches.keys().then((nombres) =>
+            Promise.all(
+                nombres.map((nombre) => {
+                    if (nombre !== CACHE_NAME) return caches.delete(nombre);
                 })
-            );
-        })
+            )
+        )
     );
     self.clients.claim();
 });
 
-// Estrategia: Cache first, network fallback
+// Estrategia: NETWORK FIRST (red primero, caché como respaldo offline)
+// Así siempre se muestra la versión más reciente cuando hay internet,
+// y la app sigue funcionando sin conexión.
 self.addEventListener('fetch', (evento) => {
-    // Ignorar no-get requests
-    if (evento.request.method !== 'GET') {
-        return;
+    if (evento.request.method !== 'GET') return;
+
+    // No interceptar peticiones a Firebase / Google (deben ir siempre a la red)
+    const url = evento.request.url;
+    if (url.includes('firebase') || url.includes('googleapis') || url.includes('gstatic')) {
+        return; // deja que el navegador lo maneje normalmente
     }
 
     evento.respondWith(
-        caches.match(evento.request).then((respuesta) => {
-            // Si existe en cache, devolverlo
-            if (respuesta) {
+        fetch(evento.request)
+            .then((respuesta) => {
+                // Guardar copia fresca en caché
+                if (respuesta && respuesta.status === 200 && respuesta.type === 'basic') {
+                    const clon = respuesta.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(evento.request, clon));
+                }
                 return respuesta;
-            }
-
-            // Si no está en cache, intentar traerlo de la red
-            return fetch(evento.request)
-                .then((respuesta) => {
-                    // No hacer cache de respuestas no-exitosas
-                    if (!respuesta || respuesta.status !== 200 || respuesta.type !== 'basic') {
-                        return respuesta;
-                    }
-
-                    // Clonar la respuesta
-                    const respuestaClonada = respuesta.clone();
-
-                    // Agregar a cache para futuras solicitudes
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(evento.request, respuestaClonada);
-                    });
-
-                    return respuesta;
-                })
-                .catch(() => {
-                    // Si falla la red y no existe en cache, devolver una respuesta offline
-                    return caches.match('./index.html');
-                });
-        })
+            })
+            .catch(() =>
+                // Sin internet → usar lo que haya en caché
+                caches.match(evento.request).then((c) => c || caches.match('./index.html'))
+            )
     );
 });
 
-// Manejar mensajes desde el cliente
 self.addEventListener('message', (evento) => {
-    if (evento.data && evento.data.type === 'SKIP_WAITING') {
-        self.skipWaiting();
-    }
+    if (evento.data && evento.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
