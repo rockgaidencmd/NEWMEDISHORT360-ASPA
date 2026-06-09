@@ -14,78 +14,270 @@
     <link rel="icon" type="image/png" sizes="512x512" href="./icono-512.png">
     <link rel="apple-touch-icon" href="./icono-192.png">
     <link rel="stylesheet" href="./style.css">
+
+    <style>
+        /* ── PANTALLA DE ACTIVACIÓN ── */
+        #pantalla-activacion {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0a0f1e 0%, #1a1f3e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .card-activacion {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 24px;
+            padding: 36px 28px;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+        }
+        .card-activacion .icono { font-size: 52px; margin-bottom: 10px; }
+        .card-activacion h1 {
+            color: #c8a614;
+            font-size: 20px;
+            margin: 0 0 4px;
+            letter-spacing: 1px;
+        }
+        .card-activacion .subtitulo-act {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            margin: 0 0 28px;
+        }
+        .input-act {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .input-act:focus { border-color: #c8a614; }
+        .input-act::placeholder { color: rgba(255,255,255,0.3); }
+        .btn-activar {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            background: #c8a614;
+            color: #000;
+            border: none;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn-activar:active { transform: scale(0.98); opacity: 0.85; }
+        .btn-activar:disabled { opacity: 0.5; cursor: not-allowed; }
+        .msg-act {
+            font-size: 13px;
+            margin-top: 14px;
+            min-height: 20px;
+            border-radius: 8px;
+            padding: 6px 10px;
+        }
+        .msg-ok { color: #4caf50; background: rgba(76,175,80,0.1); }
+        .msg-error { color: #ff6b6b; background: rgba(255,107,107,0.1); }
+        .msg-loading { color: rgba(255,255,255,0.5); }
+        .pasos {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .paso {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+        }
+        .paso-num {
+            background: #c8a614;
+            color: #000;
+            font-weight: 800;
+            font-size: 11px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .separador {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin: 20px 0;
+        }
+        .ya-tengo {
+            color: rgba(255,255,255,0.35);
+            font-size: 12px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            text-decoration: underline;
+            margin-top: 12px;
+        }
+        /* Ocultar app hasta activar */
+        #app-contenido { display: none; }
+    </style>
 </head>
 <body>
-    <div class="contenedor-principal">
-        <header class="encabezado">
-            <h1 class="titulo">MEDISHORT360</h1>
-            <p class="subtitulo">Calculadora de Soluciones Clinicas</p>
-        </header>
 
-        <div class="seccion-logo">
-            <div class="logo-animado">
-                <img src="./logo.jpeg" alt="MEDISHORT360 Logo" class="logo-img">
-            </div>
-        </div>
+    <!-- ══════════════════════════════════════
+         PANTALLA DE ACTIVACIÓN (se oculta al activar)
+    ══════════════════════════════════════ -->
+    <div id="pantalla-activacion">
+        <div class="card-activacion">
 
-        <div class="contenedor-calculadora">
-            <div class="tab-contenedor">
-                <button class="tab-boton activo" data-tab="soluciones">Soluciones Salinas</button>
-                <button class="tab-boton" data-tab="dextrosa">Dextrosa</button>
-            </div>
+            <div id="vista-bienvenida">
+                <div class="icono">🩺</div>
+                <h1>MEDISHORT360</h1>
+                <p class="subtitulo-act">Regla del Aspa · Activación de licencia</p>
 
-            <!-- TAB: SOLUCIONES SALINAS -->
-            <div id="soluciones" class="contenido-tab activo">
-                <div class="grupo-entrada">
-                    <label for="volumen-salina">Volumen Deseado (mL):</label>
-                    <input type="number" id="volumen-salina" placeholder="Ej: 500" min="0" step="10">
-                </div>
-
-                <div class="grupo-entrada">
-                    <label for="concentracion-salina">Concentracion de Solucion (%):</label>
-                    <div class="botones-rapidos">
-                        <button class="boton-rapido" data-valor="0.9">0.9%</button>
-                        <button class="boton-rapido" data-valor="3">3%</button>
-                        <button class="boton-rapido" data-valor="7">7%</button>
+                <div class="pasos">
+                    <div class="paso">
+                        <span class="paso-num">1</span>
+                        <span>Paga al número de cuenta indicado por WhatsApp</span>
                     </div>
-                    <input type="number" id="concentracion-salina" placeholder="Ej: 3" min="0" step="0.1">
-                </div>
-
-                <button id="boton-calcular-salina" class="boton-principal">Calcular Solucion Salina</button>
-
-                <div id="resultado-salina" class="resultado"></div>
-            </div>
-
-            <!-- TAB: DEXTROSA -->
-            <div id="dextrosa" class="contenido-tab">
-                <div class="grupo-entrada">
-                    <label for="volumen-dextrosa">Volumen Deseado (mL):</label>
-                    <input type="number" id="volumen-dextrosa" placeholder="Ej: 500" min="0" step="10">
-                </div>
-
-                <div class="grupo-entrada">
-                    <label for="concentracion-dextrosa">Concentracion de Dextrosa (%):</label>
-                    <div class="botones-rapidos">
-                        <button class="boton-rapido" data-valor="5">5%</button>
-                        <button class="boton-rapido" data-valor="10">10%</button>
-                        <button class="boton-rapido" data-valor="50">50%</button>
+                    <div class="paso">
+                        <span class="paso-num">2</span>
+                        <span>Recibirás un <strong style="color:#c8a614;">código único</strong> por WhatsApp</span>
                     </div>
-                    <input type="number" id="concentracion-dextrosa" placeholder="Ej: 5" min="0" step="0.1">
+                    <div class="paso">
+                        <span class="paso-num">3</span>
+                        <span>Ingresa tu correo y el código — ¡listo para siempre!</span>
+                    </div>
                 </div>
 
-                <button id="boton-calcular-dextrosa" class="boton-principal">Calcular Dextrosa</button>
+                <button class="btn-activar" onclick="mostrarFormActivacion()">
+                    Tengo mi código →
+                </button>
 
-                <div id="resultado-dextrosa" class="resultado"></div>
+                <hr class="separador">
+                <p style="color:rgba(255,255,255,0.4); font-size:12px; margin:0;">
+                    ¿Aún no tienes código?<br>
+                    <strong style="color:#c8a614;">Escríbenos por WhatsApp</strong>
+                </p>
             </div>
 
-            <button id="boton-limpiar" class="boton-limpiar">Limpiar</button>
-        </div>
+            <div id="vista-formulario" style="display:none;">
+                <div class="icono">🔑</div>
+                <h1>MEDISHORT360</h1>
+                <p class="subtitulo-act">Ingresa tus datos para activar</p>
 
-        <footer class="pie">
-            <p>MEDISHORT360-ASPA &copy; 2024 | Herramienta Educativa Profesional</p>
-        </footer>
+                <input
+                    class="input-act"
+                    type="email"
+                    id="input-correo"
+                    placeholder="Tu correo electrónico"
+                    autocomplete="email"
+                />
+                <input
+                    class="input-act"
+                    type="text"
+                    id="input-codigo"
+                    placeholder="Código (Ej: ASPA-7X9K-2M4P-K3L8)"
+                    autocomplete="off"
+                    style="text-transform:uppercase; letter-spacing:1px;"
+                />
+
+                <button class="btn-activar" id="btn-activar" onclick="activarLicencia()">
+                    Activar app →
+                </button>
+
+                <p class="msg-act" id="msg-activacion"></p>
+
+                <button class="ya-tengo" onclick="mostrarBienvenida()">← Volver</button>
+            </div>
+
+        </div>
     </div>
 
-    <script src="./app.js"></script>
+    <!-- ══════════════════════════════════════
+         APP CONTENIDO (oculto hasta activar)
+    ══════════════════════════════════════ -->
+    <div id="app-contenido">
+        <div class="contenedor-principal">
+            <header class="encabezado">
+                <h1 class="titulo">MEDISHORT360</h1>
+                <p class="subtitulo">Calculadora de Soluciones Clinicas</p>
+            </header>
+
+            <div class="seccion-logo">
+                <div class="logo-animado">
+                    <img src="./logo.jpeg" alt="MEDISHORT360 Logo" class="logo-img">
+                </div>
+            </div>
+
+            <div class="contenedor-calculadora">
+                <div class="tab-contenedor">
+                    <button class="tab-boton activo" data-tab="soluciones">Soluciones Salinas</button>
+                    <button class="tab-boton" data-tab="dextrosa">Dextrosa</button>
+                </div>
+
+                <!-- TAB: SOLUCIONES SALINAS -->
+                <div id="soluciones" class="contenido-tab activo">
+                    <div class="grupo-entrada">
+                        <label for="volumen-salina">Volumen Deseado (mL):</label>
+                        <input type="number" id="volumen-salina" placeholder="Ej: 500" min="0" step="10">
+                    </div>
+                    <div class="grupo-entrada">
+                        <label for="concentracion-salina">Concentracion de Solucion (%):</label>
+                        <div class="botones-rapidos">
+                            <button class="boton-rapido" data-valor="0.9">0.9%</button>
+                            <button class="boton-rapido" data-valor="3">3%</button>
+                            <button class="boton-rapido" data-valor="7">7%</button>
+                        </div>
+                        <input type="number" id="concentracion-salina" placeholder="Ej: 3" min="0" step="0.1">
+                    </div>
+                    <button id="boton-calcular-salina" class="boton-principal">Calcular Solucion Salina</button>
+                    <div id="resultado-salina" class="resultado"></div>
+                </div>
+
+                <!-- TAB: DEXTROSA -->
+                <div id="dextrosa" class="contenido-tab">
+                    <div class="grupo-entrada">
+                        <label for="volumen-dextrosa">Volumen Deseado (mL):</label>
+                        <input type="number" id="volumen-dextrosa" placeholder="Ej: 500" min="0" step="10">
+                    </div>
+                    <div class="grupo-entrada">
+                        <label for="concentracion-dextrosa">Concentracion de Dextrosa (%):</label>
+                        <div class="botones-rapidos">
+                            <button class="boton-rapido" data-valor="5">5%</button>
+                            <button class="boton-rapido" data-valor="10">10%</button>
+                            <button class="boton-rapido" data-valor="50">50%</button>
+                        </div>
+                        <input type="number" id="concentracion-dextrosa" placeholder="Ej: 5" min="0" step="0.1">
+                    </div>
+                    <button id="boton-calcular-dextrosa" class="boton-principal">Calcular Dextrosa</button>
+                    <div id="resultado-dextrosa" class="resultado"></div>
+                </div>
+
+                <button id="boton-limpiar" class="boton-limpiar">Limpiar</button>
+            </div>
+
+            <footer class="pie">
+                <p>MEDISHORT360-ASPA &copy; 2024 | Herramienta Educativa Profesional</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module" src="./app.js"></script>
 </body>
 </html>
