@@ -1,6 +1,6 @@
 {
   "name": "MEDISHORT360-ASPA Calculadora Clinica",
-  "short_name": "MEDISHORT360",
+  "short_name": "MS360-ASPA",
   "description": "Calculadora profesional de soluciones salinas y dextrosa para entornos clinicos",
   "start_url": "./index.html",
   "scope": "./",
@@ -41,24 +41,14 @@
       "short_name": "Salina",
       "description": "Calcular solucion salina",
       "url": "./index.html?tab=soluciones",
-      "icons": [
-        {
-          "src": "./icono-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "icons": [{ "src": "./icono-192.png", "sizes": "192x192" }]
     },
     {
       "name": "Dextrosa",
       "short_name": "Dextrosa",
       "description": "Calcular dextrosa",
       "url": "./index.html?tab=dextrosa",
-      "icons": [
-        {
-          "src": "./icono-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "icons": [{ "src": "./icono-192.png", "sizes": "192x192" }]
     }
   ],
   "prefer_related_applications": false
