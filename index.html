@@ -233,24 +233,15 @@
     </style>
   </head>
   <body>
-    <!-- ============ PUERTA DE ACTIVACION ============ -->
+    <!-- ============ PUERTA DE ACCESO ============ -->
     <div id="aspa-gate">
       <div class="aspa-gate-card">
-        <img src="./icono-192.png" alt="MEDISHORT360" class="aspa-logo" />
-        <div class="aspa-gate-brand">MEDISHORT360 · ASPA</div>
-        <div class="aspa-gate-title">Activación</div>
-        <div class="aspa-gate-sub">Ingresa tu código único para desbloquear la calculadora.</div>
-
-        <div class="aspa-input-row">
-          <input id="aspa-codigo" type="text" inputmode="text"
-                 placeholder="CÓDIGO" autocomplete="off"
-                 autocapitalize="characters" spellcheck="false" maxlength="40" />
+        <div class="gate-logo-wrap">
+          <span class="gate-logo-ring"></span>
+          <img src="./icono-192.png" class="gate-logo" alt="MEDISHORT360"/>
         </div>
-
-        <button id="aspa-activar" class="aspa-btn">Activar</button>
-        <div id="aspa-msg" class="aspa-msg"></div>
-
-        <div class="aspa-gate-footer">Solo necesitas activar una vez en este dispositivo.</div>
+        <div class="gate-eyebrow">MEDISHORT360 · ASPA</div>
+        <div class="gate-spinner" role="status" aria-label="Cargando"></div>
       </div>
     </div>
 
@@ -264,7 +255,10 @@
     </div>
     <button id="install-btn" onclick="handleInstall()">🩺 Instalar app</button>
     <script src="./app.js"></script>
-    <!-- Lógica de activación con Firebase (módulo, no toca app.js) -->
-    <script type="module" src="./activacion.js"></script>
+    <!-- Acceso: login + suscripción (módulos, no tocan app.js) -->
+    <script type="module">
+      import { iniciarAcceso } from './acceso.js';
+      iniciarAcceso();
+    </script>
   </body>
 </html>

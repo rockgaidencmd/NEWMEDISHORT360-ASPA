@@ -1,12 +1,15 @@
-// Nombre de la cache — SUBIDO A v3 para forzar limpieza del caché viejo
-const CACHE_NAME = 'medishort360-aspa-v3';
+// Nombre de la cache — SUBIDO A v4 para forzar limpieza del caché viejo
+const CACHE_NAME = 'medishort360-aspa-v4';
 
 const urlsParaCache = [
     './',
     './index.html',
     './style.css',
     './app.js',
-    './activacion.js',
+    './acceso.js',
+    './auth.js',
+    './config.js',
+    './logica-acceso.js',
     './manifest.json',
     './icono-192.png',
     './icono-512.png'
@@ -42,7 +45,8 @@ self.addEventListener('fetch', (evento) => {
 
     // No interceptar peticiones a Firebase / Google (deben ir siempre a la red)
     const url = evento.request.url;
-    if (url.includes('firebase') || url.includes('googleapis') || url.includes('gstatic')) {
+    if (url.includes('firebase') || url.includes('googleapis') || url.includes('gstatic')
+        || url.includes('/api/') || url.includes('paypal')) {
         return; // deja que el navegador lo maneje normalmente
     }
 

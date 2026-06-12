@@ -326,7 +326,7 @@ if("serviceWorker" in navigator){
   window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
 }
 
-document.addEventListener("DOMContentLoaded",()=>{
+function arrancarApp(){
   makeParticles();
 
   el("z-header").innerHTML=`
@@ -348,4 +348,5 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   renderForm();
   renderResult();
-});
+}
+window.addEventListener('ms360-acceso-ok', arrancarApp);
