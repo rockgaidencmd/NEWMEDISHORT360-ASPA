@@ -53,6 +53,13 @@ describe('calcularAccesoHasta', () => {
   it('lanza error si el plan no existe', () => {
     expect(() => calcularAccesoHasta('semanal', AHORA, config)).toThrow();
   });
+
+  it('no se desborda en fin de mes: 31 ene + 1 mes cae en febrero, no en marzo', () => {
+    const ene31 = Date.parse('2026-01-31T12:00:00Z');
+    const r = calcularAccesoHasta('mensual', ene31, config);
+    const d = new Date(r);
+    expect(d.getUTCMonth()).toBe(1); // febrero (0-indexed)
+  });
 });
 
 describe('nuevoTrial', () => {

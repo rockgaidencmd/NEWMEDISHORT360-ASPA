@@ -16,7 +16,12 @@ export function calcularAccesoHasta(plan, desdeMs, config) {
   const def = config.PLANES[plan];
   if (!def) throw new Error(`Plan desconocido: ${plan}`);
   const d = new Date(desdeMs);
-  d.setMonth(d.getMonth() + def.meses);
+  const mesObjetivo = d.getUTCMonth() + def.meses;
+  d.setUTCMonth(mesObjetivo);
+  // Si el día se desbordó a otro mes (ej. 31 ene -> 3 mar), retroceder al
+  // último día del mes que correspondía.
+  const mesEsperado = ((mesObjetivo % 12) + 12) % 12;
+  if (d.getUTCMonth() !== mesEsperado) d.setUTCDate(0);
   return d.getTime();
 }
 
