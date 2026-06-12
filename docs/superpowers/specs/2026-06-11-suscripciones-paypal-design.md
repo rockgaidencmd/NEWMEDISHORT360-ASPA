@@ -103,6 +103,7 @@ Al reconectar: revalida contra Firestore
     paypal.js              Helpers: obtener access token, verificar firma del webhook
 auth.js                    Login con link mágico (reemplaza a activacion.js)
 acceso.js                  Decide: mostrar app / paywall / login + gracia offline
+config.js                  Perillas ajustables no-secretas (fuente de verdad única)
 vercel.json                Configuración de deploy de Vercel
 .env.example               Plantilla de variables de entorno (sin secretos reales)
 ```
@@ -120,6 +121,34 @@ estilos del gate actual, no necesita archivo HTML separado.
 
 ### Eliminados
 - `activacion.js` y toda la lógica de "código por dispositivo".
+
+## Configuración
+
+Las perillas ajustables no-secretas viven en un único `config.js`, fuente de
+verdad para navegador y backend. Cambiar un valor aquí lo actualiza en todos
+lados.
+
+```js
+// config.js
+export const CONFIG = {
+  TRIAL_DIAS: 7,              // duración de la prueba gratis
+  GRACIA_OFFLINE_DIAS: 7,     // días de uso offline antes de exigir revalidación
+  REVALIDAR_CADA_HORAS: 24,   // cada cuánto la app revalida online
+  PLANES: {
+    mensual: { label: "Mensual", precio: "5.00",  paypal_plan_id: "P-XXXX" },
+    anual:   { label: "Anual",   precio: "40.00", paypal_plan_id: "P-YYYY" },
+  },
+};
+```
+
+Importante: `TRIAL_DIAS` y el cálculo de `acceso_hasta` los **aplica el
+backend** (la función serverless que crea/actualiza el documento), no el
+navegador. El frontend solo lee `config.js` para mostrar precios y para la
+gracia offline. Así un usuario no puede editar su navegador para darse prueba
+infinita. Ambos lados leen el mismo archivo para no duplicar valores.
+
+Los **secretos** (claves de PayPal, credenciales de Firebase Admin) NO van en
+`config.js`; viven solo en variables de entorno de Vercel.
 
 ## Modelo de datos
 
