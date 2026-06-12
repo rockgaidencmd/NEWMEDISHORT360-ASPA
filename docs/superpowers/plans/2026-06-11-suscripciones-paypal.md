@@ -820,6 +820,15 @@ git commit -m "feat(auth): add magic-link email login"
 Decide qué pantalla mostrar: login, paywall o la app. Cachea el perfil para
 la gracia offline. Usa `logica-acceso.js` (probado) y `auth.js`.
 
+> NOTA: tras la implementación base, una pasada de diseño (skill frontend-design)
+> elevó las vistas y añadió dos estados (`vistaVerificando` y `vistaErrorConexion`
+> con reintento) que resuelven el Issue 1 del review: ante una falla de red sin
+> gracia, se ofrece reintentar en vez de mandar al paywall a un suscriptor válido.
+> Los estilos premium viven en el bloque `<style>` de acceso en `index.html` y se
+> usan fuentes (Fraunces) con degradado elegante para no romper el modo offline.
+> El código vigente de `acceso.js` es la fuente de verdad (difiere del bloque base
+> de abajo, que se conserva como referencia del flujo).
+
 **Files:**
 - Create: `acceso.js`
 
@@ -986,6 +995,27 @@ por:
       import { iniciarAcceso } from './acceso.js';
       iniciarAcceso();
     </script>
+```
+
+- [ ] **Step 1b: Reemplazar el contenido inicial del gate por una tarjeta de carga**
+
+El `#aspa-gate` actual contiene el formulario de código (`#aspa-codigo`, etc.).
+`acceso.js` reemplaza ese contenido por sus vistas, pero para evitar un parpadeo
+del formulario viejo antes de que corra el JS, reemplazar TODO el bloque
+`<div id="aspa-gate"> ... </div>` por una tarjeta de carga neutra que ya usa
+los estilos premium:
+
+```html
+    <div id="aspa-gate">
+      <div class="aspa-gate-card">
+        <div class="gate-logo-wrap">
+          <span class="gate-logo-ring"></span>
+          <img src="./icono-192.png" class="gate-logo" alt="MEDISHORT360"/>
+        </div>
+        <div class="gate-eyebrow">MEDISHORT360 · ASPA</div>
+        <div class="gate-spinner" role="status" aria-label="Cargando"></div>
+      </div>
+    </div>
 ```
 
 - [ ] **Step 2: Excluir `/api/*` del cache en `sw.js`**
