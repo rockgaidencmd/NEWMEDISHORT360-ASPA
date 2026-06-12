@@ -16,6 +16,10 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'method' });
 
   const evento = req.body;
+  // PENDIENTE SANDBOX: PayPal verifica la firma contra los BYTES crudos del
+  // cuerpo. Aquí se pasa el objeto ya parseado (req.body), que al re-serializar
+  // puede no coincidir y rechazar eventos legítimos. Antes de produccion: leer
+  // el body crudo (raw) y verificar contra esa cadena. Validar en sandbox.
   const valido = await verificarWebhook(req.headers, evento);
   if (!valido) return res.status(400).json({ error: 'firma inválida' });
 
@@ -48,6 +52,12 @@ export default async function handler(req, res) {
       const map = await db.collection('paypal_subs').doc(subId).get();
       if (map.exists) {
         const { uid, plan } = map.data();
+        // Si el plan ya no existe en CONFIG, ignorar (200) en vez de reintentar para siempre.
+        if (!CONFIG.PLANES[plan]) return res.status(200).json({ ok: true, ignorado: 'plan-desconocido' });
+        // PENDIENTE SANDBOX: la renovacion calcula desde Date.now(). Idealmente
+        // extender desde max(acceso_hasta, fecha del evento) con deduplicacion por
+        // id de evento para no perder dias pagados ni apilar duplicados. Ajustar
+        // tras observar el timing real de PayPal en sandbox.
         const accesoMs = calcularAccesoHasta(plan, Date.now(), CONFIG);
         await db.collection('users').doc(uid).set({
           status: 'active',
