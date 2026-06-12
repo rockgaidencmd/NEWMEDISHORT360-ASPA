@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Cada usuario solo puede LEER su propio documento.
+    // Nadie escribe desde el navegador: solo el backend (Admin SDK) escribe.
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+    // Mapeo de suscripciones: solo backend. Cerrado al cliente.
+    match /paypal_subs/{subId} {
+      allow read, write: if false;
+    }
+  }
+}
