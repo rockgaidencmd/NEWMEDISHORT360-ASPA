@@ -1157,6 +1157,8 @@ Estos pasos no son automatizables; se hacen una vez antes de producción.
 - [ ] Habilitar "Email link (passwordless)" en Firebase Auth y añadir el dominio de Vercel a los dominios autorizados.
 - [ ] Probar flujo completo en sandbox: registro → trial → fin de trial → pago → acceso → cancelar → vencimiento.
 - [ ] Probar offline: con acceso vigente, cortar red, recargar → la app abre (gracia).
+- [ ] **OBLIGATORIO antes de producción (Issue 1, ver comentario PENDIENTE SANDBOX en `api/paypal-webhook.js`):** corregir la verificación de firma del webhook para validar contra el **body crudo** (raw bytes), no el objeto re-serializado. Con el código actual, PayPal probablemente rechazará eventos legítimos (el usuario paga pero no obtiene acceso). Validar en sandbox que ACTIVATED/SALE escriben en Firestore.
+- [ ] **Recomendado (Issue 3, ver comentario en `api/paypal-webhook.js`):** ajustar la renovación para extender desde `max(acceso_hasta, fecha del evento)` con deduplicación por id de evento, tras observar el timing real de PayPal en sandbox.
 - [ ] Cambiar `PAYPAL_ENV=live` y credenciales live para producción.
 
 ---
