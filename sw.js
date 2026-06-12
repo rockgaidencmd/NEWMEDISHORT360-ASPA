@@ -23,7 +23,7 @@ self.addEventListener('install', (evento) => {
     self.skipWaiting();
 });
 
-// Activar: borra TODOS los caches viejos (cualquiera que no sea v3)
+// Activar: borra TODOS los caches viejos (cualquiera que no sea la version actual)
 self.addEventListener('activate', (evento) => {
     evento.waitUntil(
         caches.keys().then((nombres) =>
