@@ -191,6 +191,9 @@ async function resolverAcceso(user) {
 }
 
 export async function iniciarAcceso() {
+  // SOLO DESARROLLO: salta el gate y muestra la app directo. Ver config.js.
+  if (CONFIG.DEV_BYPASS_ACCESO) { mostrarApp(); return; }
+
   // Estado inicial inmediato mientras se resuelve la sesión.
   vistaVerificando();
 
