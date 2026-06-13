@@ -1189,6 +1189,7 @@ Estos pasos no son automatizables; se hacen una vez antes de producción.
 - [ ] Probar offline: con acceso vigente, cortar red, recargar → la app abre (gracia).
 - [ ] **OBLIGATORIO antes de producción (Issue 1, ver comentario PENDIENTE SANDBOX en `api/paypal-webhook.js`):** corregir la verificación de firma del webhook para validar contra el **body crudo** (raw bytes), no el objeto re-serializado. Con el código actual, PayPal probablemente rechazará eventos legítimos (el usuario paga pero no obtiene acceso). Validar en sandbox que ACTIVATED/SALE escriben en Firestore.
 - [ ] **Recomendado (Issue 3, ver comentario en `api/paypal-webhook.js`):** ajustar la renovación para extender desde `max(acceso_hasta, fecha del evento)` con deduplicación por id de evento, tras observar el timing real de PayPal en sandbox.
+- [ ] **OBLIGATORIO antes de producción:** confirmar que `CONFIG.DEV_BYPASS_ACCESO` está en `false` en `config.js` (el interruptor que salta el login para pruebas locales).
 - [ ] Cambiar `PAYPAL_ENV=live` y credenciales live para producción.
 
 ---
