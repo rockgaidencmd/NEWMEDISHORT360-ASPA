@@ -190,9 +190,20 @@ async function resolverAcceso(user) {
   else vistaPaywall(user);
 }
 
+// Verdadero solo en localhost o IPs de red local (pruebas locales y por LAN).
+// En cualquier dominio público (producción) devuelve falso.
+function esEntornoLocal() {
+  const h = location.hostname;
+  return h === 'localhost' || h === '127.0.0.1' || h === '::1'
+    || /^192\.168\./.test(h) || /^10\./.test(h)
+    || /^172\.(1[6-9]|2\d|3[01])\./.test(h);
+}
+
 export async function iniciarAcceso() {
   // SOLO DESARROLLO: salta el gate y muestra la app directo. Ver config.js.
-  if (CONFIG.DEV_BYPASS_ACCESO) { mostrarApp(); return; }
+  // Doble candado: aunque el flag quede en true, solo aplica en entorno local;
+  // en producción (dominio público) el gate SIEMPRE se exige.
+  if (CONFIG.DEV_BYPASS_ACCESO && esEntornoLocal()) { mostrarApp(); return; }
 
   // Estado inicial inmediato mientras se resuelve la sesión.
   vistaVerificando();
